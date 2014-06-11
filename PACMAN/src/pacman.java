@@ -118,25 +118,58 @@ public class pacman {
 		}
 		
 		case 2 : {
-			ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_up.png"));
-			imagen = ii.getImage();
+			
+
+			if (!boca){
+				ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_up.png"));
+				imagen = ii.getImage();
+			this.boca = true;
+			} else
+			{
+				ImageIcon ii = new ImageIcon (this.getClass().getResource("/pacman_closed.png"));
+				imagen = ii.getImage();
+				this.boca = false;
+			 
+			}
+			
 			break;
 		}
 		case 3: {
-			ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_right.png"));
-			imagen = ii.getImage();
+			if (!boca){
+				ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_right.png"));
+				imagen = ii.getImage();
+			this.boca = true;
+			} else
+			{
+				ImageIcon ii = new ImageIcon (this.getClass().getResource("/pacman_closed.png"));
+				imagen = ii.getImage();
+				this.boca = false;
+			 
+			}
+			
 			break;
 			
 		}
 		
 		case 4: {
-			ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_down.png"));
-			imagen = ii.getImage();	
+			
+			if (!boca){
+				ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_down.png"));
+				imagen = ii.getImage();	
+			this.boca = true;
+			} else
+			{
+				ImageIcon ii = new ImageIcon (this.getClass().getResource("/pacman_closed.png"));
+				imagen = ii.getImage();
+				this.boca = false;
+			 
+			}
+			
 			break;
 			
 		}
 		default :{
-			ImageIcon ii = new ImageIcon (this.getClass().getResource("/pacman_closed.png"));
+			ImageIcon ii = new ImageIcon (this.getClass().getResource("/pacman_right.png"));
 			imagen = ii.getImage();
 		}
 		
@@ -150,6 +183,12 @@ public class pacman {
 	{
 		puntuacion = puntuacion + puntos;
 		System.out.println(puntuacion);
+		
+	}
+	
+	public int getPuntuacion()
+	{
+		return puntuacion;
 		
 	}
 	

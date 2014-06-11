@@ -7,6 +7,7 @@
 
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,6 +21,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import sun.audio.*;
+
 
 public class Tablero extends JPanel implements ActionListener{
 
@@ -27,6 +30,8 @@ public class Tablero extends JPanel implements ActionListener{
 	private objetosJuego[][] mapa = new objetosJuego[29][29];
 	private pacman _pacman;
 	private fantasma _fantasma;
+	private libreriaAudio _audio;
+	
 
 	// DefiniciON del nivel.
 	int[][] map = {
@@ -121,6 +126,8 @@ public class Tablero extends JPanel implements ActionListener{
 		setSize(new Dimension(610, 630));
 
 	    cargaMapa();
+	    
+	    _audio = new libreriaAudio();
 		_pacman = new pacman();
 	    _fantasma = new fantasma();
 		timer = new Timer(3, this);
@@ -205,13 +212,21 @@ public class Tablero extends JPanel implements ActionListener{
 		
 		//DIBUJAMOS A PACMAN EN EL TABLERO.
 		g2d.drawImage(_pacman.getImage(), _pacman.getX(), _pacman.getY(), this);
-		
+
 		
 		// COMPROBAMOS SI EL FANTASMA SE ENCUENTRA ACTIVO.
 		if (_fantasma.getActivo() == true) {
 		//DIBUJAMOS A FANTASMA EN EL TABLERO.
-		g2d.drawImage(_fantasma.getImagen(), _fantasma.getX(), _fantasma.getY(), this);
+		g2d.drawImage(_fantasma.getImagen(), _fantasma.getX(), _fantasma.getY(), this);	
 		}
+		
+		g2d.setColor(Color.BLUE);
+		g2d.setFont(new Font("Verdana", Font.BOLD, 20));
+		g2d.drawString("PUNTUACIÓN", 680,50);
+		
+		g2d.setColor(Color.WHITE);
+		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
+		g2d.drawString(String.valueOf(_pacman.getPuntuacion()), 740,80);
 		}
 	
 	
@@ -235,6 +250,8 @@ public class Tablero extends JPanel implements ActionListener{
 				if (r1.intersects(r2) && mapa[columna][fila].getClase()==2 && mapa[columna][fila].getActivo()==true){
 				      mapa[columna][fila].setActivo(false);
 				      _pacman.setPuntuacion(10); //Sumamos los puntos del puntito.
+				      _audio.BALL.play(); //Mostramos Auido para la comida.
+				      
 				}
 				
 				
@@ -287,5 +304,7 @@ public class Tablero extends JPanel implements ActionListener{
 			ex.printStackTrace();
 		}
 	}
+	
+	
 
 }
