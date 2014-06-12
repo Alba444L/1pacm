@@ -30,7 +30,7 @@ public class pacman {
 	
 	
 	public void move() {
-		System.out.println(x+" "+ " "+y);
+		//System.out.println(x+" "+ " "+y);
 		
 		
 		//Comprobamos si salimos por la derecha y lo colocamos a la izquierda.
@@ -182,7 +182,7 @@ public class pacman {
 	public void setPuntuacion(int puntos)
 	{
 		puntuacion = puntuacion + puntos;
-		System.out.println(puntuacion);
+		//System.out.println(puntuacion);
 		
 	}
 	

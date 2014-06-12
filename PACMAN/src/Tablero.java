@@ -5,7 +5,6 @@
  * ver: 1
  */
 
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Dimension;
@@ -23,15 +22,13 @@ import javax.swing.Timer;
 
 import sun.audio.*;
 
-
-public class Tablero extends JPanel implements ActionListener{
+public class Tablero extends JPanel implements ActionListener {
 
 	private Timer timer;
 	private objetosJuego[][] mapa = new objetosJuego[29][29];
 	private pacman _pacman;
 	private fantasma _fantasma;
 	private libreriaAudio _audio;
-	
 
 	// DefiniciON del nivel.
 	int[][] map = {
@@ -101,11 +98,11 @@ public class Tablero extends JPanel implements ActionListener{
 					1, 1, 1, 1, 1, 1 },
 
 	};
-	
+
 	private class TAdopter extends KeyAdapter {
 
 		public void keyReleased(KeyEvent e) {
-		_pacman.keyReleased(e);
+			_pacman.keyReleased(e);
 		}
 
 		public void keyPressed(KeyEvent e) {
@@ -113,10 +110,9 @@ public class Tablero extends JPanel implements ActionListener{
 
 		}
 	}
-	
-	
+
 	public Tablero() {
-		
+
 		setSize(new Dimension(610, 630));
 
 		addKeyListener(new TAdopter());
@@ -125,72 +121,93 @@ public class Tablero extends JPanel implements ActionListener{
 		setDoubleBuffered(true);
 		setSize(new Dimension(610, 630));
 
-	    cargaMapa();
-	    
-	    _audio = new libreriaAudio();
+		cargaMapa();
+
+		_audio = new libreriaAudio();
 		_pacman = new pacman();
-	    _fantasma = new fantasma();
+		_fantasma = new fantasma();
 		timer = new Timer(3, this);
 		timer.start();
 	}
-	
-	
-	
-	//CONTROL DEL MOVIMIENTO DE PACMAN EN FUNCIÓN DE SI PUEDE O NO PUEDE.
+
+	// CONTROL DEL MOVIMIENTO DE PACMAN EN FUNCIÓN DE SI PUEDE O NO PUEDE.
 	public void actionPerformed(ActionEvent e) {
 
-		
-		switch(_pacman.getDireccion())
-		{
-		case 1:
-		{
-		if (!verificarObjeto(_pacman.getX()-1,_pacman.getY())){  
-		
-		_pacman.move();
-		}break;
-		}
-		case 2:
-		{
-			if (!verificarObjeto(_pacman.getX(),_pacman.getY()-1))
-			{
-				_pacman.move();
-			}
-			break;
-					
-		}
-		case 3:
-		{
-			if (!verificarObjeto(_pacman.getX()+1, _pacman.getY()))
-			{
-				_pacman.move();
-			}
-			break;
-		}
-		case 4:
-		{
-			if (!verificarObjeto(_pacman.getX(),_pacman.getY()+1))
-			{
-				_pacman.move();
-			}
-			break;
-		}
-		
-		}
-		
-	
-    colisionPersonajes();
-	repaint();
+		switch (_pacman.getDireccion()) {
+		case 1: {
+			if (!verificarObjeto(_pacman.getX() - 1, _pacman.getY())) {
 
-}
+				_pacman.move();
+			}
+			break;
+		}
+		case 2: {
+			if (!verificarObjeto(_pacman.getX(), _pacman.getY() - 1)) {
+				_pacman.move();
+			}
+			break;
 
-	
-	//MÉTODO PRINCIPAL DE DIBUJO EN PANTALLA.
-	public void paint (Graphics g)
-	{
-		super.paint(g); //SOBRESCRIBIMOS EL CONTEXTO GRÁFICO.
-		Graphics2D g2d = (Graphics2D) g; //LO CONVERTIMOS EN TIPO 2D.
-		Toolkit.getDefaultToolkit().sync(); //MÉTODO PARA SINCRONIZAR.
-		
+		}
+		case 3: {
+			if (!verificarObjeto(_pacman.getX() + 1, _pacman.getY())) {
+				_pacman.move();
+			}
+			break;
+		}
+		case 4: {
+			if (!verificarObjeto(_pacman.getX(), _pacman.getY() + 1)) {
+				_pacman.move();
+			}
+			break;
+		}
+
+		}
+        
+		_fantasma.busquedaPacman(_pacman.getX(), _pacman.getY());
+		switch (_fantasma.getDireccion()) {
+		case 1: {
+			if (!verificarObjetoFantasma(_fantasma.getBounds(
+					_fantasma.getX() - 1, _fantasma.getY()))) {
+				_fantasma.moverIzquierda();
+				// System.out.println("Fantasma se puede mover"); }
+			}
+		}
+		case 2: {
+			if (!verificarObjetoFantasma(_fantasma.getBounds(_fantasma.getX(),
+					_fantasma.getY() - 1))) {
+				_fantasma.moverArriba();
+				// System.out.println("Fantasma se puede mover"); }
+			}
+
+		}
+		case 3: {
+			if (!verificarObjetoFantasma(_fantasma.getBounds(
+					_fantasma.getX() + 1, _fantasma.getY()))) {
+				_fantasma.moverDerecha();
+				 System.out.println("Fantasma se puede mover Derecha"); 
+			}
+		}
+		case 4: {
+			if (!verificarObjetoFantasma(_fantasma.getBounds(_fantasma.getX(),
+					_fantasma.getY() + 1))) {
+				_fantasma.moverAbajo();
+
+			}
+
+		}
+
+		}
+
+		colisionPersonajes();
+		repaint();
+
+	}
+
+	// MÉTODO PRINCIPAL DE DIBUJO EN PANTALLA.
+	public void paint(Graphics g) {
+		super.paint(g); // SOBRESCRIBIMOS EL CONTEXTO GRÁFICO.
+		Graphics2D g2d = (Graphics2D) g; // LO CONVERTIMOS EN TIPO 2D.
+		Toolkit.getDefaultToolkit().sync(); // MÉTODO PARA SINCRONIZAR.
 
 		try {
 			for (int columna = 0; columna < mapa.length; columna++) {
@@ -209,76 +226,83 @@ public class Tablero extends JPanel implements ActionListener{
 			ex.printStackTrace();
 		}
 
-		
-		//DIBUJAMOS A PACMAN EN EL TABLERO.
+		// DIBUJAMOS A PACMAN EN EL TABLERO.
 		g2d.drawImage(_pacman.getImage(), _pacman.getX(), _pacman.getY(), this);
 
-		
 		// COMPROBAMOS SI EL FANTASMA SE ENCUENTRA ACTIVO.
 		if (_fantasma.getActivo() == true) {
-		//DIBUJAMOS A FANTASMA EN EL TABLERO.
-		g2d.drawImage(_fantasma.getImagen(), _fantasma.getX(), _fantasma.getY(), this);	
+			// DIBUJAMOS A FANTASMA EN EL TABLERO.
+			g2d.drawImage(_fantasma.getImagen(), _fantasma.getX(),
+					_fantasma.getY(), this);
 		}
-		
+
 		g2d.setColor(Color.BLUE);
 		g2d.setFont(new Font("Verdana", Font.BOLD, 20));
-		g2d.drawString("PUNTUACIÓN", 680,50);
-		
+		g2d.drawString("PUNTUACIÓN", 680, 50);
+
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
-		g2d.drawString(String.valueOf(_pacman.getPuntuacion()), 740,80);
-		}
-	
-	
-	
-	//MÉTODO PARA COMPROBAR SI PACMAN SE PUEDE MOVER.
-	public boolean verificarObjeto(int x, int y)
-	{
-		Rectangle r1 = _pacman.getBounds(x,y);
-		
-		for (int columna =0; columna< mapa.length; columna++)
-		{
-			for (int fila=0; fila<mapa.length -1;fila++)
-			{
+		g2d.drawString(String.valueOf(_pacman.getPuntuacion()), 740, 80);
+	}
+
+	// MÉTODO PARA COMPROBAR SI PACMAN SE PUEDE MOVER.
+	public boolean verificarObjeto(int x, int y) {
+		Rectangle r1 = _pacman.getBounds(x, y);
+
+		for (int columna = 0; columna < mapa.length; columna++) {
+			for (int fila = 0; fila < mapa.length - 1; fila++) {
 				Rectangle r2 = mapa[columna][fila].getBounds();
-				
-				//verificamos que es pared.
-				if (r1.intersects(r2) && mapa[columna][fila].getClase()==1){
+
+				// verificamos que es pared.
+				if (r1.intersects(r2) && mapa[columna][fila].getClase() == 1) {
 					return true;
 				}
-				//verificamos que es punto y si es así se lo come.
-				if (r1.intersects(r2) && mapa[columna][fila].getClase()==2 && mapa[columna][fila].getActivo()==true){
-				      mapa[columna][fila].setActivo(false);
-				      _pacman.setPuntuacion(10); //Sumamos los puntos del puntito.
-				      _audio.BALL.play(); //Mostramos Auido para la comida.
-				      
+				// verificamos que es punto y si es así se lo come.
+				if (r1.intersects(r2) && mapa[columna][fila].getClase() == 2
+						&& mapa[columna][fila].getActivo() == true) {
+					mapa[columna][fila].setActivo(false);
+					_pacman.setPuntuacion(10); // Sumamos los puntos del
+												// puntito.
+					_audio.BALL.play(); // Mostramos Auido para la comida.
+
 				}
-				
-				
+
 			}
 		}
-		
+
 		return false;
-				
+
 	}
-	
-	
-	//Método para determinar si colisionan los personajes.
-	
-	public void colisionPersonajes()
-	{
-	  Rectangle r1 =_pacman.getBounds(_pacman.getX(), _pacman.getY());
-	  Rectangle r2 = _fantasma.getBounds(_fantasma.getX(), _fantasma.getY());
-	  
-	  if (r1.intersects(r2) && _fantasma.getComestible() == true)
-	  {
-		  _fantasma.setActivo(false);
-	  }
-			  
+
+	// MÉTODO PARA COMPROBAR SI LOS FANTASMAS SE PUEDEN MOVER.
+	public boolean verificarObjetoFantasma(Rectangle fantasma) {
+		for (int columna = 0; columna < mapa.length; columna++) {
+			for (int fila = 0; fila < mapa.length - 1; fila++) {
+				Rectangle r2 = mapa[columna][fila].getBounds();
+
+				// verificamos que es pared.
+				if (fantasma.intersects(r2)
+						&& mapa[columna][fila].getClase() == 1) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
-	
-	
-	
+
+	// Método para determinar si colisionan los personajes.
+
+	public void colisionPersonajes() {
+		Rectangle r1 = _pacman.getBounds(_pacman.getX(), _pacman.getY());
+		Rectangle r2 = _fantasma.getBounds(_fantasma.getX(), _fantasma.getY());
+
+		if (r1.intersects(r2) && _fantasma.getComestible() == true) {
+			_fantasma.setActivo(false);
+		}
+
+	}
+
 	// MÉTODO PARA LA CARGA DEL MAPA.
 	public void cargaMapa() {
 		try {
@@ -304,7 +328,5 @@ public class Tablero extends JPanel implements ActionListener{
 			ex.printStackTrace();
 		}
 	}
-	
-	
 
 }
