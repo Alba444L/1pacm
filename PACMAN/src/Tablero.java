@@ -27,7 +27,7 @@ public class Tablero extends JPanel implements ActionListener {
 	private Timer timer;
 	private objetosJuego[][] mapa = new objetosJuego[29][29];
 	private pacman _pacman;
-	private fantasma _fantasma;
+	private fantasma_Blinky _fantasma_Blinky;
 	private libreriaAudio _audio;
 
 	// DefiniciON del nivel.
@@ -125,7 +125,7 @@ public class Tablero extends JPanel implements ActionListener {
 
 		_audio = new libreriaAudio();
 		_pacman = new pacman();
-		_fantasma = new fantasma();
+		_fantasma_Blinky = new fantasma_Blinky();
 		timer = new Timer(3, this);
 		timer.start();
 	}
@@ -163,36 +163,55 @@ public class Tablero extends JPanel implements ActionListener {
 
 		}
         
-		_fantasma.busquedaPacman(_pacman.getX(), _pacman.getY());
-		switch (_fantasma.getDireccion()) {
+		
+		//Comprobamos a que velocidad debe funcionar.		
+		_fantasma_Blinky.comprobar_Velocidad(_pacman.getPuntuacion());
+		
+		// Indicamos la posición del fantasma en la pantalla.
+		switch (_fantasma_Blinky.getDireccion()) {
 		case 1: {
-			if (!verificarObjetoFantasma(_fantasma.getBounds(
-					_fantasma.getX() - 1, _fantasma.getY()))) {
-				_fantasma.moverIzquierda();
-				// System.out.println("Fantasma se puede mover"); }
+			if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
+					_fantasma_Blinky.getX() - 1, _fantasma_Blinky.getY()))) {
+				_fantasma_Blinky.moverIzquierda();
+				
+			}else {
+				_fantasma_Blinky.cambiarDireccion(_pacman.getX(), _pacman.getY(), 1);
 			}
+			break;
 		}
 		case 2: {
-			if (!verificarObjetoFantasma(_fantasma.getBounds(_fantasma.getX(),
-					_fantasma.getY() - 1))) {
-				_fantasma.moverArriba();
-				// System.out.println("Fantasma se puede mover"); }
+			if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(_fantasma_Blinky.getX(),
+					_fantasma_Blinky.getY() - 1))) {
+				_fantasma_Blinky.moverArriba();
+				
+			}else {
+				_fantasma_Blinky.cambiarDireccion(_pacman.getX(), _pacman.getY(), 2);
 			}
+			
+			break;
 
 		}
 		case 3: {
-			if (!verificarObjetoFantasma(_fantasma.getBounds(
-					_fantasma.getX() + 1, _fantasma.getY()))) {
-				_fantasma.moverDerecha();
-				 System.out.println("Fantasma se puede mover Derecha"); 
+			if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
+					_fantasma_Blinky.getX() + 1, _fantasma_Blinky.getY()))) {
+				_fantasma_Blinky.moverDerecha();
+				
 			}
+			else {
+				_fantasma_Blinky.cambiarDireccion(_pacman.getX(), _pacman.getY(), 3);
+			}
+			break;
 		}
 		case 4: {
-			if (!verificarObjetoFantasma(_fantasma.getBounds(_fantasma.getX(),
-					_fantasma.getY() + 1))) {
-				_fantasma.moverAbajo();
+			if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(_fantasma_Blinky.getX(),
+					_fantasma_Blinky.getY() + 1))) {
+				_fantasma_Blinky.moverAbajo();
 
+			} else
+			{
+				_fantasma_Blinky.cambiarDireccion(_pacman.getX(), _pacman.getY(), 4);
 			}
+			break;
 
 		}
 
@@ -206,6 +225,10 @@ public class Tablero extends JPanel implements ActionListener {
 	// MÉTODO PRINCIPAL DE DIBUJO EN PANTALLA.
 	public void paint(Graphics g) {
 		super.paint(g); // SOBRESCRIBIMOS EL CONTEXTO GRÁFICO.
+		
+		
+		
+		
 		Graphics2D g2d = (Graphics2D) g; // LO CONVERTIMOS EN TIPO 2D.
 		Toolkit.getDefaultToolkit().sync(); // MÉTODO PARA SINCRONIZAR.
 
@@ -227,15 +250,20 @@ public class Tablero extends JPanel implements ActionListener {
 		}
 
 		// DIBUJAMOS A PACMAN EN EL TABLERO.
+		
+		if (_pacman.getActivo()==true){
 		g2d.drawImage(_pacman.getImage(), _pacman.getX(), _pacman.getY(), this);
-
+		}
+		
 		// COMPROBAMOS SI EL FANTASMA SE ENCUENTRA ACTIVO.
-		if (_fantasma.getActivo() == true) {
+		if (_fantasma_Blinky.getActivo() == true) {
 			// DIBUJAMOS A FANTASMA EN EL TABLERO.
-			g2d.drawImage(_fantasma.getImagen(), _fantasma.getX(),
-					_fantasma.getY(), this);
+			g2d.drawImage(_fantasma_Blinky.getImagen(), _fantasma_Blinky.getX(),
+					_fantasma_Blinky.getY(), this);
 		}
 
+		
+		// SECCIÓN PARA DIBUJAR LA PUNTUACIÓN DE PACMAN EN PANTALLA.
 		g2d.setColor(Color.BLUE);
 		g2d.setFont(new Font("Verdana", Font.BOLD, 20));
 		g2d.drawString("PUNTUACIÓN", 680, 50);
@@ -243,6 +271,16 @@ public class Tablero extends JPanel implements ActionListener {
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
 		g2d.drawString(String.valueOf(_pacman.getPuntuacion()), 740, 80);
+		
+		// SECCIÓN PARA DIBUJAR LAS VIDAS DE PACMAN.
+		g2d.setColor(Color.BLUE);
+		g2d.setFont(new Font("Verdana", Font.BOLD, 20));
+		g2d.drawString("VIDAS", 680, 100);
+
+		g2d.setColor(Color.WHITE);
+		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
+		g2d.drawString(String.valueOf(_pacman.getVida()), 740, 130);
+		
 	}
 
 	// MÉTODO PARA COMPROBAR SI PACMAN SE PUEDE MOVER.
@@ -295,10 +333,22 @@ public class Tablero extends JPanel implements ActionListener {
 
 	public void colisionPersonajes() {
 		Rectangle r1 = _pacman.getBounds(_pacman.getX(), _pacman.getY());
-		Rectangle r2 = _fantasma.getBounds(_fantasma.getX(), _fantasma.getY());
+		Rectangle r2 = _fantasma_Blinky.getBounds(_fantasma_Blinky.getX(), _fantasma_Blinky.getY());
 
-		if (r1.intersects(r2) && _fantasma.getComestible() == true) {
-			_fantasma.setActivo(false);
+		if (r1.intersects(r2) && _fantasma_Blinky.getComestible() == true) {
+			_fantasma_Blinky.setActivo(false);
+		}
+		else if (r1.intersects(r2) && _fantasma_Blinky.getComestible() == false)
+		{
+			int vidas = _pacman.getVida();
+			vidas = vidas-1;
+			_pacman.setVida(vidas);
+			_audio.muerePacman.play();
+			
+			_pacman.setActivo(false);
+			_pacman.setReiniciar();
+			_fantasma_Blinky.setReiniciar();
+			
 		}
 
 	}

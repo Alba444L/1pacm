@@ -23,10 +23,10 @@ public class pacman {
 	private Image imagen;
 	private int width;
 	private int height;
-	private int posAX;
-	private int posAY;
 	private int direccion; //1 izquierda 2 Arriba 3 Derecha 4 Abajo.
 	private boolean boca; //Para controlar el estado de la boca.
+	private int vidas; // almacenamos el numero de vidas.
+	private boolean activo;
 	
 	
 	public void move() {
@@ -80,16 +80,53 @@ public class pacman {
 	}
 	
 	public pacman() {
-		ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_right.png"));
+		ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_left.png"));
 		imagen = ii.getImage();
 		x = 320;
-		y = 384;
+		y = 505;
 		width = imagen.getWidth(null);
 		height = imagen.getHeight(null);
-		direccion = 3;
+		direccion = 1;
 		puntuacion = 0;
 		boca = true ;//La boca se encuentra abierta.
-		// TODO Auto-generated constructor stub
+		vidas = 3;
+		activo = true; // Indicamos que se encuentra activo al principio
+	}
+	
+	public void setReiniciar()
+	{
+		ImageIcon ii = new ImageIcon(this.getClass().getResource("/pacman_left.png"));
+		imagen = ii.getImage();
+		x = 320;
+		y = 505;
+		width = imagen.getWidth(null);
+		height = imagen.getHeight(null);
+		direccion = 1;
+		puntuacion = 0;
+		activo = true;
+	}
+	
+	
+	public void setActivo(boolean activo)
+	{
+		this.activo = activo;
+	}
+	
+	
+	
+	public boolean getActivo()
+	{
+		return activo;
+	}
+	
+	
+	public void setVida ( int vidas )
+	{
+		this.vidas = vidas;
+	}
+	public int getVida()
+	{
+		return vidas;
 	}
 	
 	//Método para establecer el grafico del personaje

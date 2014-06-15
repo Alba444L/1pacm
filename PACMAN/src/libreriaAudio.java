@@ -6,6 +6,9 @@ public class libreriaAudio {
 
 	private URL audio = this.getClass().getResource("atepellot.wav");
 	public  final AudioClip BALL = Applet.newAudioClip( audio);
+	private URL audio_muerte_pacman = this.getClass().getResource("died.wav");
+	public final AudioClip muerePacman = Applet.newAudioClip(audio_muerte_pacman);
+	
 	
 	public void musica(){
 		URL url = this.getClass().getResource("intro.wav");
@@ -20,6 +23,5 @@ public class libreriaAudio {
 		}
 		
 		
-		System.out.println("end");
-	}
+			}
 }
