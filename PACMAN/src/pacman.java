@@ -27,6 +27,7 @@ public class pacman {
 	private boolean boca; //Para controlar el estado de la boca.
 	private int vidas; // almacenamos el numero de vidas.
 	private boolean activo;
+	private boolean pausa; //Almacena si el juego esta en pausa.
 	
 	
 	public void move() {
@@ -91,7 +92,14 @@ public class pacman {
 		boca = true ;//La boca se encuentra abierta.
 		vidas = 3;
 		activo = true; // Indicamos que se encuentra activo al principio
+		pausa = false; // El juego no se encuentra en pausa.
 	}
+	
+	public boolean getEstadoPausa()
+	{
+		return pausa;
+	}
+	
 	
 	public void setReiniciar()
 	{
@@ -277,6 +285,15 @@ public class pacman {
 				direccion = 4;
 				setGrafico(direccion);
 			
+				
+			}
+			if (key == KeyEvent.VK_P) {
+				if (!pausa){
+				pausa = true;
+				}
+				else {
+					pausa = false;
+				}
 				
 			}
 

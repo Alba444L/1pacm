@@ -1,7 +1,13 @@
+/* CLASE PADRE fantasma.java heredaran las clases hijas fantasmas.
+ * Creado por: Javier Rodríguez Soler.
+ * 1º DAM FLORIDA.
+ * 16/06/2014
+ * ver: 2
+ */
 import java.awt.Image;
 import java.awt.Rectangle;
 
-import javax.swing.ImageIcon;
+
 
 public class fantasma {
 

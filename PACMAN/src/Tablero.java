@@ -2,7 +2,7 @@
  * Creado por: Javier Rodríguez Soler.
  * 1º DAM FLORIDA.
  * 09/06/2014
- * ver: 1
+ * ver: 3
  */
 
 import java.awt.Color;
@@ -133,154 +133,164 @@ public class Tablero extends JPanel implements ActionListener {
 	// CONTROL DEL MOVIMIENTO DE PACMAN EN FUNCIÓN DE SI PUEDE O NO PUEDE.
 	public void actionPerformed(ActionEvent e) {
 
-		switch (_pacman.getDireccion()) {
-		case 1: {
-			if (!verificarObjeto(_pacman.getX() - 1, _pacman.getY())) {
+		if (!_pacman.getEstadoPausa()) { //Comprobamos si han pulsado p y si es así pausa el juego.
+			switch (_pacman.getDireccion()) {
+			case 1: {
+				if (!verificarObjeto(_pacman.getX() - 1, _pacman.getY())) {
 
-				_pacman.move();
+					_pacman.move();
+				}
+				break;
 			}
-			break;
-		}
-		case 2: {
-			if (!verificarObjeto(_pacman.getX(), _pacman.getY() - 1)) {
-				_pacman.move();
+			case 2: {
+				if (!verificarObjeto(_pacman.getX(), _pacman.getY() - 1)) {
+					_pacman.move();
+				}
+				break;
+
 			}
-			break;
+			case 3: {
+				if (!verificarObjeto(_pacman.getX() + 1, _pacman.getY())) {
+					_pacman.move();
+				}
+				break;
+			}
+			case 4: {
+				if (!verificarObjeto(_pacman.getX(), _pacman.getY() + 1)) {
+					_pacman.move();
+				}
+				break;
+			}
+
+			}
+
+			// Comprobamos a que velocidad debe funcionar.
+			_fantasma_Blinky.comprobar_Velocidad(_pacman.getPuntuacion());
+
+			// Indicamos la posición del fantasma en la pantalla.
+			switch (_fantasma_Blinky.getDireccion()) {
+			case 1: {
+				if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
+						_fantasma_Blinky.getX() - 1, _fantasma_Blinky.getY()))) {
+					_fantasma_Blinky.moverIzquierda();
+
+				} else {
+					_fantasma_Blinky.cambiarDireccion(_pacman.getX(),
+							_pacman.getY(), 1);
+				}
+				break;
+			}
+			case 2: {
+				if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
+						_fantasma_Blinky.getX(), _fantasma_Blinky.getY() - 1))) {
+					_fantasma_Blinky.moverArriba();
+
+				} else {
+					_fantasma_Blinky.cambiarDireccion(_pacman.getX(),
+							_pacman.getY(), 2);
+				}
+
+				break;
+
+			}
+			case 3: {
+				if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
+						_fantasma_Blinky.getX() + 1, _fantasma_Blinky.getY()))) {
+					_fantasma_Blinky.moverDerecha();
+
+				} else {
+					_fantasma_Blinky.cambiarDireccion(_pacman.getX(),
+							_pacman.getY(), 3);
+				}
+				break;
+			}
+			case 4: {
+				if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
+						_fantasma_Blinky.getX(), _fantasma_Blinky.getY() + 1))) {
+					_fantasma_Blinky.moverAbajo();
+
+				} else {
+					_fantasma_Blinky.cambiarDireccion(_pacman.getX(),
+							_pacman.getY(), 4);
+				}
+				break;
+
+			}
+
+			}
+
+			colisionPersonajes();
+
+			repaint();
 
 		}
-		case 3: {
-			if (!verificarObjeto(_pacman.getX() + 1, _pacman.getY())) {
-				_pacman.move();
-			}
-			break;
-		}
-		case 4: {
-			if (!verificarObjeto(_pacman.getX(), _pacman.getY() + 1)) {
-				_pacman.move();
-			}
-			break;
-		}
-
-		}
-        
-		
-		//Comprobamos a que velocidad debe funcionar.		
-		_fantasma_Blinky.comprobar_Velocidad(_pacman.getPuntuacion());
-		
-		// Indicamos la posición del fantasma en la pantalla.
-		switch (_fantasma_Blinky.getDireccion()) {
-		case 1: {
-			if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
-					_fantasma_Blinky.getX() - 1, _fantasma_Blinky.getY()))) {
-				_fantasma_Blinky.moverIzquierda();
-				
-			}else {
-				_fantasma_Blinky.cambiarDireccion(_pacman.getX(), _pacman.getY(), 1);
-			}
-			break;
-		}
-		case 2: {
-			if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(_fantasma_Blinky.getX(),
-					_fantasma_Blinky.getY() - 1))) {
-				_fantasma_Blinky.moverArriba();
-				
-			}else {
-				_fantasma_Blinky.cambiarDireccion(_pacman.getX(), _pacman.getY(), 2);
-			}
-			
-			break;
-
-		}
-		case 3: {
-			if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
-					_fantasma_Blinky.getX() + 1, _fantasma_Blinky.getY()))) {
-				_fantasma_Blinky.moverDerecha();
-				
-			}
-			else {
-				_fantasma_Blinky.cambiarDireccion(_pacman.getX(), _pacman.getY(), 3);
-			}
-			break;
-		}
-		case 4: {
-			if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(_fantasma_Blinky.getX(),
-					_fantasma_Blinky.getY() + 1))) {
-				_fantasma_Blinky.moverAbajo();
-
-			} else
-			{
-				_fantasma_Blinky.cambiarDireccion(_pacman.getX(), _pacman.getY(), 4);
-			}
-			break;
-
-		}
-
-		}
-
-		colisionPersonajes();
-		repaint();
-
 	}
 
 	// MÉTODO PRINCIPAL DE DIBUJO EN PANTALLA.
 	public void paint(Graphics g) {
 		super.paint(g); // SOBRESCRIBIMOS EL CONTEXTO GRÁFICO.
-		
-		
-		
-		
+
 		Graphics2D g2d = (Graphics2D) g; // LO CONVERTIMOS EN TIPO 2D.
 		Toolkit.getDefaultToolkit().sync(); // MÉTODO PARA SINCRONIZAR.
 
-		try {
-			for (int columna = 0; columna < mapa.length; columna++) {
-				for (int fila = 0; fila < mapa.length - 1; fila++) {
+		
 
-					if (mapa[columna][fila].clase != 0
-							&& mapa[columna][fila].getActivo() == true) {
+			try {
+				for (int columna = 0; columna < mapa.length; columna++) {
+					for (int fila = 0; fila < mapa.length - 1; fila++) {
 
-						g2d.drawImage(mapa[columna][fila].getImagen(),
-								fila * 24, columna * 24, this);
+						if (mapa[columna][fila].clase != 0
+								&& mapa[columna][fila].getActivo() == true) {
+
+							g2d.drawImage(mapa[columna][fila].getImagen(),
+									fila * 24, columna * 24, this);
+						}
+
 					}
-
 				}
+			} catch (NullPointerException ex) {
+				ex.printStackTrace();
 			}
-		} catch (NullPointerException ex) {
-			ex.printStackTrace();
-		}
 
-		// DIBUJAMOS A PACMAN EN EL TABLERO.
-		
-		if (_pacman.getActivo()==true){
-		g2d.drawImage(_pacman.getImage(), _pacman.getX(), _pacman.getY(), this);
-		}
-		
-		// COMPROBAMOS SI EL FANTASMA SE ENCUENTRA ACTIVO.
-		if (_fantasma_Blinky.getActivo() == true) {
-			// DIBUJAMOS A FANTASMA EN EL TABLERO.
-			g2d.drawImage(_fantasma_Blinky.getImagen(), _fantasma_Blinky.getX(),
-					_fantasma_Blinky.getY(), this);
-		}
+			// DIBUJAMOS A PACMAN EN EL TABLERO.
 
-		
-		// SECCIÓN PARA DIBUJAR LA PUNTUACIÓN DE PACMAN EN PANTALLA.
-		g2d.setColor(Color.BLUE);
-		g2d.setFont(new Font("Verdana", Font.BOLD, 20));
-		g2d.drawString("PUNTUACIÓN", 680, 50);
+			if (_pacman.getActivo() == true) {
+				g2d.drawImage(_pacman.getImage(), _pacman.getX(),
+						_pacman.getY(), this);
+			}
 
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
-		g2d.drawString(String.valueOf(_pacman.getPuntuacion()), 740, 80);
-		
-		// SECCIÓN PARA DIBUJAR LAS VIDAS DE PACMAN.
-		g2d.setColor(Color.BLUE);
-		g2d.setFont(new Font("Verdana", Font.BOLD, 20));
-		g2d.drawString("VIDAS", 680, 100);
+			// COMPROBAMOS SI EL FANTASMA SE ENCUENTRA ACTIVO.
+			if (_fantasma_Blinky.getActivo() == true) {
+				// DIBUJAMOS A FANTASMA EN EL TABLERO.
+				g2d.drawImage(_fantasma_Blinky.getImagen(),
+						_fantasma_Blinky.getX(), _fantasma_Blinky.getY(), this);
+			}
 
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
-		g2d.drawString(String.valueOf(_pacman.getVida()), 740, 130);
-		
+			// SECCIÓN PARA DIBUJAR LA PUNTUACIÓN DE PACMAN EN PANTALLA.
+			g2d.setColor(Color.BLUE);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 20));
+			g2d.drawString("PUNTUACIÓN", 680, 50);
+
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 30));
+			g2d.drawString(String.valueOf(_pacman.getPuntuacion()), 740, 80);
+
+			// SECCIÓN PARA DIBUJAR LAS VIDAS DE PACMAN.
+			g2d.setColor(Color.BLUE);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 20));
+			g2d.drawString("VIDAS", 720, 130);
+
+			for (int i = 0; i < _pacman.getVida(); i++) {
+				g2d.drawImage(_pacman.getImage(), 710 + i * 30, 150, this);
+			}
+			
+			//SECCIÓN PARA DIBUJAR LA PAUSA.
+			if (_pacman.getEstadoPausa()){
+			g2d.fillRect(720,550, 100, 100);
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 20));
+			g2d.drawString("PAUSA", 730, 600);
+			}
 	}
 
 	// MÉTODO PARA COMPROBAR SI PACMAN SE PUEDE MOVER.
@@ -305,6 +315,15 @@ public class Tablero extends JPanel implements ActionListener {
 
 				}
 
+				// Verificamos que se trata de un super punto y si es así se lo
+				// come.
+				if (r1.intersects(r2) && mapa[columna][fila].getClase() == 3
+						&& mapa[columna][fila].getActivo() == true) {
+					mapa[columna][fila].setActivo(false);
+					_pacman.setPuntuacion(10); // Sumamos los puntos del
+												// puntito.
+					_audio.BALL.play(); // Mostramos Auido para la comida.
+				}
 			}
 		}
 
@@ -333,22 +352,22 @@ public class Tablero extends JPanel implements ActionListener {
 
 	public void colisionPersonajes() {
 		Rectangle r1 = _pacman.getBounds(_pacman.getX(), _pacman.getY());
-		Rectangle r2 = _fantasma_Blinky.getBounds(_fantasma_Blinky.getX(), _fantasma_Blinky.getY());
+		Rectangle r2 = _fantasma_Blinky.getBounds(_fantasma_Blinky.getX(),
+				_fantasma_Blinky.getY());
 
 		if (r1.intersects(r2) && _fantasma_Blinky.getComestible() == true) {
 			_fantasma_Blinky.setActivo(false);
-		}
-		else if (r1.intersects(r2) && _fantasma_Blinky.getComestible() == false)
-		{
+		} else if (r1.intersects(r2)
+				&& _fantasma_Blinky.getComestible() == false) {
 			int vidas = _pacman.getVida();
-			vidas = vidas-1;
+			vidas = vidas - 1;
 			_pacman.setVida(vidas);
 			_audio.muerePacman.play();
-			
+
 			_pacman.setActivo(false);
 			_pacman.setReiniciar();
 			_fantasma_Blinky.setReiniciar();
-			
+
 		}
 
 	}
