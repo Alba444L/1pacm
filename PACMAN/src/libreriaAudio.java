@@ -8,7 +8,8 @@ public class libreriaAudio {
 	public  final AudioClip BALL = Applet.newAudioClip( audio);
 	private URL audio_muerte_pacman = this.getClass().getResource("died.wav");
 	public final AudioClip muerePacman = Applet.newAudioClip(audio_muerte_pacman);
-	
+	private URL audio_come_fantasma = this.getClass().getResource("ateghost.wav");
+	public final AudioClip comeFantasma = Applet.newAudioClip(audio_come_fantasma);
 	
 	public void musica(){
 		URL url = this.getClass().getResource("intro.wav");

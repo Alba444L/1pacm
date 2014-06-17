@@ -39,6 +39,7 @@ public class fantasma_Blinky extends fantasma {
 		{
 			
 			
+			
 			switch(direccionAntigua)
 			{
 			
@@ -89,6 +90,7 @@ public class fantasma_Blinky extends fantasma {
 			}
 		  
 			}
+		
 		}
 		
 		@Override 

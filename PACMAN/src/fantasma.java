@@ -6,6 +6,11 @@
  */
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.Timer;
 
 
 
@@ -34,6 +39,44 @@ public class fantasma {
 
 	public boolean getComestible() {
 		return comestible;
+	}
+	
+	
+	// Método para indicar si el fantasma es comestible
+	public void setComestible( boolean activo){
+		final Image imagenanterior = imagen;
+		
+		
+		// MÉTODO  Y objeto timer para determinar el tiempo de conversión de los fantasmas.
+		Timer timer = new Timer (5000, new ActionListener(){
+			public void actionPerformed (ActionEvent e)
+			{
+				System.out.println("Se acaba el tiempo");
+				comestible = false;
+				imagen = imagenanterior;
+							
+				
+			}
+		});
+		
+		
+		if (activo==true){
+			comestible = true;
+		    ImageIcon ii = new ImageIcon(this.getClass().getResource(
+				"/ghost_teal.png"));
+		    imagen = ii.getImage();
+		    
+			timer.restart();
+			//timer.start();
+			activo =false;
+			
+			
+		
+		}else{
+		
+		timer.stop();
+		timer.removeActionListener(null);
+		}
 	}
 
 	public void setActivo(boolean activo) {

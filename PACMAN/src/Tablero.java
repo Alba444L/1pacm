@@ -126,7 +126,7 @@ public class Tablero extends JPanel implements ActionListener {
 		_audio = new libreriaAudio();
 		_pacman = new pacman();
 		_fantasma_Blinky = new fantasma_Blinky();
-		timer = new Timer(3, this);
+		timer = new Timer(2, this);
 		timer.start();
 	}
 
@@ -134,7 +134,11 @@ public class Tablero extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (!_pacman.getEstadoPausa()) { //Comprobamos si han pulsado p y si es así pausa el juego.
-			switch (_pacman.getDireccion()) {
+			
+			
+			
+			
+						switch (_pacman.getDireccion()) {
 			case 1: {
 				if (!verificarObjeto(_pacman.getX() - 1, _pacman.getY())) {
 
@@ -234,6 +238,9 @@ public class Tablero extends JPanel implements ActionListener {
 		Toolkit.getDefaultToolkit().sync(); // MÉTODO PARA SINCRONIZAR.
 
 		
+		
+		
+		
 
 			try {
 				for (int columna = 0; columna < mapa.length; columna++) {
@@ -322,7 +329,10 @@ public class Tablero extends JPanel implements ActionListener {
 					mapa[columna][fila].setActivo(false);
 					_pacman.setPuntuacion(10); // Sumamos los puntos del
 												// puntito.
-					_audio.BALL.play(); // Mostramos Auido para la comida.
+					_audio.BALL.play();// Mostramos Auido para la comida.
+					_fantasma_Blinky.setComestible(true);
+					_fantasma_Blinky.setComestible(false);
+					
 				}
 			}
 		}
@@ -356,7 +366,11 @@ public class Tablero extends JPanel implements ActionListener {
 				_fantasma_Blinky.getY());
 
 		if (r1.intersects(r2) && _fantasma_Blinky.getComestible() == true) {
+			_audio.comeFantasma.play();
 			_fantasma_Blinky.setActivo(false);
+			_pacman.setPuntuacion(100);
+			_fantasma_Blinky.setReiniciar();
+			
 		} else if (r1.intersects(r2)
 				&& _fantasma_Blinky.getComestible() == false) {
 			int vidas = _pacman.getVida();
