@@ -48,10 +48,10 @@ public class fantasma {
 		
 		
 		// MÉTODO  Y objeto timer para determinar el tiempo de conversión de los fantasmas.
-		Timer timer = new Timer (5000, new ActionListener(){
+		Timer timer = new Timer (9000, new ActionListener(){
 			public void actionPerformed (ActionEvent e)
 			{
-				System.out.println("Se acaba el tiempo");
+				
 				comestible = false;
 				imagen = imagenanterior;
 							
@@ -113,7 +113,36 @@ public class fantasma {
 		y = y - 1;
 	}
 
+	//cambiar la dirección cuando se trata de la colisión con otros fantasmas.
 	
+		public void cambiarDireccion(int direccionAntigua)
+		{
+			switch(direccionAntigua)
+			{
+			
+			case 1:{
+				direccion = 3;
+				break;
+			}
+			case 2:
+			{
+				direccion = 4;
+				break;
+			}
+			case 3:
+			{
+				direccion =1;
+				break;
+			}
+			case 4:
+			{
+				direccion =2;
+				break;
+			}
+		  
+			}
+			
+		}
 	
 	// Método para determinar la posición de los bordes de gráficos en la
 	// posición que se le pasa.

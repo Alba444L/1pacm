@@ -1,3 +1,10 @@
+/* CLASE libreriaAudio.java Libreria para el control del audio del juego
+ * Creado por: Javier Rodríguez Soler.
+ * 1º DAM FLORIDA.
+ * 09/06/2014
+ * ver: 1
+ */
+
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.net.URL;
@@ -10,6 +17,8 @@ public class libreriaAudio {
 	public final AudioClip muerePacman = Applet.newAudioClip(audio_muerte_pacman);
 	private URL audio_come_fantasma = this.getClass().getResource("ateghost.wav");
 	public final AudioClip comeFantasma = Applet.newAudioClip(audio_come_fantasma);
+	private URL audio_fantasma_azules = this.getClass().getResource("blue_ghosts.wav");
+	public final AudioClip convierteAzulFantasma = Applet.newAudioClip(audio_fantasma_azules);
 	
 	public void musica(){
 		URL url = this.getClass().getResource("intro.wav");

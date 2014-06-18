@@ -1,3 +1,9 @@
+/* CLASE hija de fantasma.java fantasma_Blinky.java
+ * Creado por: Javier Rodríguez Soler.
+ * 1º DAM FLORIDA.
+ * 19/06/2014
+ * ver: 1
+ */
 import javax.swing.ImageIcon;
 
 
@@ -10,7 +16,7 @@ public class fantasma_Blinky extends fantasma {
 		ImageIcon ii = new ImageIcon(this.getClass().getResource(
 				"/ghost_red.png"));
 		imagen = ii.getImage();
-		x = 320;
+		x = 380;
 		y = 240;
 		width = imagen.getWidth(null);
 		height = imagen.getHeight(null);
@@ -24,7 +30,7 @@ public class fantasma_Blinky extends fantasma {
 		ImageIcon ii = new ImageIcon(this.getClass().getResource(
 				"/ghost_red.png"));
 		imagen = ii.getImage();
-		x = 320;
+		x = 380;
 		y = 240;
 		width = imagen.getWidth(null);
 		height = imagen.getHeight(null);

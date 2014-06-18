@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,10 +18,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import sun.audio.*;
+
 
 public class Tablero extends JPanel implements ActionListener {
 
@@ -28,7 +30,11 @@ public class Tablero extends JPanel implements ActionListener {
 	private objetosJuego[][] mapa = new objetosJuego[29][29];
 	private pacman _pacman;
 	private fantasma_Blinky _fantasma_Blinky;
+	private fantasma_Pinky _fantasma_Pinky;
+	private fantasma_Clyde _fantasma_Clyde;
 	private libreriaAudio _audio;
+	private ImageIcon ii = new ImageIcon(this.getClass().getResource("/logo.png"));
+	private Image imagen = ii.getImage();
 
 	// DefiniciON del nivel.
 	int[][] map = {
@@ -111,6 +117,8 @@ public class Tablero extends JPanel implements ActionListener {
 		}
 	}
 
+	
+	// CONSTRUCTOR DE LA CLASE.
 	public Tablero() {
 
 		setSize(new Dimension(610, 630));
@@ -126,6 +134,8 @@ public class Tablero extends JPanel implements ActionListener {
 		_audio = new libreriaAudio();
 		_pacman = new pacman();
 		_fantasma_Blinky = new fantasma_Blinky();
+		_fantasma_Pinky = new fantasma_Pinky();
+		_fantasma_Clyde = new fantasma_Clyde();
 		timer = new Timer(2, this);
 		timer.start();
 	}
@@ -171,7 +181,7 @@ public class Tablero extends JPanel implements ActionListener {
 			// Comprobamos a que velocidad debe funcionar.
 			_fantasma_Blinky.comprobar_Velocidad(_pacman.getPuntuacion());
 
-			// Indicamos la posición del fantasma en la pantalla.
+			// Indicamos la posición del fantasma Blinky  en la pantalla.
 			switch (_fantasma_Blinky.getDireccion()) {
 			case 1: {
 				if (!verificarObjetoFantasma(_fantasma_Blinky.getBounds(
@@ -222,6 +232,106 @@ public class Tablero extends JPanel implements ActionListener {
 			}
 
 			}
+			
+			// Indicamos la posición del fantasma Pinky en la pantalla.
+						switch (_fantasma_Pinky.getDireccion()) {
+						case 1: {
+							if (!verificarObjetoFantasma(_fantasma_Pinky.getBounds(
+									_fantasma_Pinky.getX() - 1, _fantasma_Pinky.getY()))) {
+								_fantasma_Pinky.moverIzquierda();
+
+							} else {
+								_fantasma_Pinky.cambiarDireccion(_pacman.getX(),
+										_pacman.getY(), 1);
+							}
+							break;
+						}
+						case 2: {
+							if (!verificarObjetoFantasma(_fantasma_Pinky.getBounds(
+									_fantasma_Pinky.getX(), _fantasma_Pinky.getY() - 1))) {
+								_fantasma_Pinky.moverArriba();
+
+							} else {
+								_fantasma_Pinky.cambiarDireccion(_pacman.getX(),
+										_pacman.getY(), 2);
+							}
+
+							break;
+
+						}
+						case 3: {
+							if (!verificarObjetoFantasma(_fantasma_Pinky.getBounds(
+									_fantasma_Pinky.getX() + 1, _fantasma_Pinky.getY()))) {
+								_fantasma_Pinky.moverDerecha();
+
+							} else {
+								_fantasma_Pinky.cambiarDireccion(_pacman.getX(),
+										_pacman.getY(), 3);
+							}
+							break;
+						}
+						case 4: {
+							if (!verificarObjetoFantasma(_fantasma_Pinky.getBounds(
+									_fantasma_Pinky.getX(), _fantasma_Pinky.getY() + 1))) {
+								_fantasma_Pinky.moverAbajo();
+
+							} else {
+								_fantasma_Pinky.cambiarDireccion(_pacman.getX(),
+										_pacman.getY(), 4);
+							}
+							break;
+
+						}
+
+						}
+						
+						// Indicamos la posición del fantasma Clyde en la pantalla.
+						switch (_fantasma_Clyde.getDireccion()) {
+						case 1: {
+							if (!verificarObjetoFantasma(_fantasma_Clyde.getBounds(
+									_fantasma_Clyde.getX() - 1, _fantasma_Clyde.getY()))) {
+								_fantasma_Clyde.moverIzquierda();
+
+							} else {
+								_fantasma_Clyde.cambiarDireccion();
+							}
+							break;
+						}
+						case 2: {
+							if (!verificarObjetoFantasma(_fantasma_Clyde.getBounds(
+									_fantasma_Clyde.getX(), _fantasma_Clyde.getY() - 1))) {
+								_fantasma_Clyde.moverArriba();
+
+							} else {
+								_fantasma_Clyde.cambiarDireccion();
+							}
+
+							break;
+
+						}
+						case 3: {
+							if (!verificarObjetoFantasma(_fantasma_Clyde.getBounds(
+									_fantasma_Clyde.getX() + 1, _fantasma_Clyde.getY()))) {
+								_fantasma_Clyde.moverDerecha();
+
+							} else {
+								_fantasma_Clyde.cambiarDireccion();
+							}
+							break;
+						}
+						case 4: {
+							if (!verificarObjetoFantasma(_fantasma_Clyde.getBounds(
+									_fantasma_Clyde.getX(), _fantasma_Clyde.getY() + 1))) {
+								_fantasma_Clyde.moverAbajo();
+
+							} else {
+								_fantasma_Clyde.cambiarDireccion();
+							}
+							break;
+
+						}
+
+						}
 
 			colisionPersonajes();
 
@@ -266,11 +376,21 @@ public class Tablero extends JPanel implements ActionListener {
 						_pacman.getY(), this);
 			}
 
-			// COMPROBAMOS SI EL FANTASMA SE ENCUENTRA ACTIVO.
+			// COMPROBAMOS SI LOS FANTASMAS SE ENCUENTRA ACTIVO Y SE DIBUJAN EN PANTALLA.
 			if (_fantasma_Blinky.getActivo() == true) {
 				// DIBUJAMOS A FANTASMA EN EL TABLERO.
 				g2d.drawImage(_fantasma_Blinky.getImagen(),
 						_fantasma_Blinky.getX(), _fantasma_Blinky.getY(), this);
+			}
+			if (_fantasma_Pinky.getActivo() == true) {
+				// DIBUJAMOS A FANTASMA EN EL TABLERO.
+				g2d.drawImage(_fantasma_Pinky.getImagen(),
+						_fantasma_Pinky.getX(), _fantasma_Pinky.getY(), this);
+			}
+			if (_fantasma_Clyde.getActivo() == true) {
+				// DIBUJAMOS A FANTASMA EN EL TABLERO.
+				g2d.drawImage(_fantasma_Clyde.getImagen(),
+						_fantasma_Clyde.getX(), _fantasma_Clyde.getY(), this);
 			}
 
 			// SECCIÓN PARA DIBUJAR LA PUNTUACIÓN DE PACMAN EN PANTALLA.
@@ -290,6 +410,10 @@ public class Tablero extends JPanel implements ActionListener {
 			for (int i = 0; i < _pacman.getVida(); i++) {
 				g2d.drawImage(_pacman.getImage(), 710 + i * 30, 150, this);
 			}
+			
+			
+			//SECCIÓN PARA DIBUJAR EL LOGO DE LA FLORIDA.
+			g2d.drawImage(imagen, 675, 480,this);
 			
 			//SECCIÓN PARA DIBUJAR LA PAUSA.
 			if (_pacman.getEstadoPausa()){
@@ -331,7 +455,12 @@ public class Tablero extends JPanel implements ActionListener {
 												// puntito.
 					_audio.BALL.play();// Mostramos Auido para la comida.
 					_fantasma_Blinky.setComestible(true);
+					_fantasma_Pinky.setComestible(true);
+					_fantasma_Clyde.setComestible(true);
+					_audio.convierteAzulFantasma.play();
 					_fantasma_Blinky.setComestible(false);
+					_fantasma_Pinky.setComestible(false);
+					_fantasma_Clyde.setComestible(false);
 					
 				}
 			}
@@ -364,7 +493,10 @@ public class Tablero extends JPanel implements ActionListener {
 		Rectangle r1 = _pacman.getBounds(_pacman.getX(), _pacman.getY());
 		Rectangle r2 = _fantasma_Blinky.getBounds(_fantasma_Blinky.getX(),
 				_fantasma_Blinky.getY());
-
+		Rectangle r3 = _fantasma_Pinky.getBounds(_fantasma_Pinky.getX(), _fantasma_Pinky.getY());
+		Rectangle r4 = _fantasma_Clyde.getBounds(_fantasma_Clyde.getX(), _fantasma_Clyde.getY());
+		
+		
 		if (r1.intersects(r2) && _fantasma_Blinky.getComestible() == true) {
 			_audio.comeFantasma.play();
 			_fantasma_Blinky.setActivo(false);
@@ -382,6 +514,66 @@ public class Tablero extends JPanel implements ActionListener {
 			_pacman.setReiniciar();
 			_fantasma_Blinky.setReiniciar();
 
+		}
+		
+		
+		if (r1.intersects(r3) && _fantasma_Pinky.getComestible() == true) {
+			_fantasma_Pinky.setActivo(false);
+			_pacman.setPuntuacion(100);
+			_fantasma_Pinky.setReiniciar();
+			
+		} else if (r1.intersects(r3)
+				&& _fantasma_Pinky.getComestible() == false) {
+			int vidas = _pacman.getVida();
+			vidas = vidas - 1;
+			_pacman.setVida(vidas);
+			_audio.muerePacman.play();
+
+			_pacman.setActivo(false);
+			_pacman.setReiniciar();
+			_fantasma_Pinky.setReiniciar();
+
+		}
+		
+		if (r1.intersects(r4) && _fantasma_Clyde.getComestible() == true) {
+			_fantasma_Clyde.setActivo(false);
+			_pacman.setPuntuacion(100);
+			_fantasma_Clyde.setReiniciar();
+			
+		} else if (r1.intersects(r4)
+				&& _fantasma_Clyde.getComestible() == false) {
+			int vidas = _pacman.getVida();
+			vidas = vidas - 1;
+			_pacman.setVida(vidas);
+			_audio.muerePacman.play();
+
+			_pacman.setActivo(false);
+			_pacman.setReiniciar();
+			_fantasma_Clyde.setReiniciar();
+
+		}
+		
+		
+		//En el caso de que los fantasmas choque entre si.
+		
+		if (r2.intersects(r3))
+		{
+			//_fantasma_Pinky.cambiarDireccion(_fantasma_Pinky.getDireccion());
+			_fantasma_Blinky.cambiarDireccion(_fantasma_Blinky.getDireccion());
+			
+		}
+		if (r2.intersects(r4))
+		{
+			//_fantasma_Blinky.cambiarDireccion(_fantasma_Blinky.getDireccion());
+			_fantasma_Clyde.cambiarDireccion(_fantasma_Clyde.getDireccion());
+			
+		}
+		
+		if (r3.intersects(r4))
+		{
+			_fantasma_Pinky.cambiarDireccion(_fantasma_Pinky.getDireccion());
+			//_fantasma_Clyde.cambiarDireccion(_fantasma_Clyde.getDireccion());
+			
 		}
 
 	}

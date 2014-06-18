@@ -12,8 +12,6 @@ public class main extends JFrame{
 	public main(){
 		
 		
-		   
-		
 		add (new Tablero());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(860,700);
