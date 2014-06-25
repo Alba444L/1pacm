@@ -33,8 +33,10 @@ public class Tablero extends JPanel implements ActionListener {
 	private fantasma_Pinky _fantasma_Pinky;
 	private fantasma_Clyde _fantasma_Clyde;
 	private libreriaAudio _audio;
-	private ImageIcon ii = new ImageIcon(this.getClass().getResource("/logo.png"));
+	private ImageIcon ii = new ImageIcon(this.getClass().getResource("/logo_uned.gif"));
 	private Image imagen = ii.getImage();
+	private String Estado="inicio";
+	private int puntos=0;
 
 	// DefiniciON del nivel.
 	int[][] map = {
@@ -136,17 +138,36 @@ public class Tablero extends JPanel implements ActionListener {
 		_fantasma_Blinky = new fantasma_Blinky();
 		_fantasma_Pinky = new fantasma_Pinky();
 		_fantasma_Clyde = new fantasma_Clyde();
-		timer = new Timer(2, this);
+		timer = new Timer(1, this);
 		timer.start();
 	}
 
 	// CONTROL DEL MOVIMIENTO DE PACMAN EN FUNCIÓN DE SI PUEDE O NO PUEDE.
 	public void actionPerformed(ActionEvent e) {
 
-		if (!_pacman.getEstadoPausa()) { //Comprobamos si han pulsado p y si es así pausa el juego.
+		requestFocus();
+		
+		if (_pacman.getVida()<1 && Estado =="jugando"){
+			Estado="gameover";
+			puntos=0;
+			_pacman.setReiniciar();
+			_fantasma_Blinky.setReiniciar();
+			_fantasma_Clyde.setReiniciar();
+			_fantasma_Pinky.setReiniciar();
+			
+					
+		}
+		
+		if (Estado=="inicio" && _pacman.getEnter())
+		{
+			Estado = "jugando";
+		}
+		
+		
+		if (!_pacman.getEstadoPausa() && Estado =="jugando") { //Comprobamos si han pulsado p y si es así pausa el juego.
 			
 			
-			
+		
 			
 						switch (_pacman.getDireccion()) {
 			case 1: {
@@ -335,9 +356,28 @@ public class Tablero extends JPanel implements ActionListener {
 
 			colisionPersonajes();
 
-			repaint();
+			
 
 		}
+
+		if (Estado=="gameover" && _pacman.getEnter())
+		{
+			Estado ="inicio";
+			_pacman.setVida(3);
+			_pacman.setEnter(false);
+			 puntos=0;
+			_pacman.setReiniciar();
+			_fantasma_Blinky.setReiniciar();
+			_fantasma_Clyde.setReiniciar();
+			_fantasma_Pinky.setReiniciar();
+			cargaMapa();
+			
+			
+		}
+		
+		
+		repaint();		
+		
 	}
 
 	// MÉTODO PRINCIPAL DE DIBUJO EN PANTALLA.
@@ -348,10 +388,24 @@ public class Tablero extends JPanel implements ActionListener {
 		Toolkit.getDefaultToolkit().sync(); // MÉTODO PARA SINCRONIZAR.
 
 		
+		switch (Estado){
 		
-		
-		
-
+		case "inicio":
+		{
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 60));
+			g2d.drawString("Pac-Man en Java",150, 200);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 30));
+			g2d.drawString("Pulse [Intro] para continuar", 190, 310);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 15));
+			g2d.drawString("Alumno: Javier Rodríguez Soler", 10, 600);
+			g2d.drawString("Asignatura: Programación Orientada a Objetos", 10, 630);
+			g2d.drawString("Curso: 2013/2014", 10, 660);
+			g2d.drawImage(imagen, 350, 400,this);
+			break;
+		}
+		case"jugando":
+		{
 			try {
 				for (int columna = 0; columna < mapa.length; columna++) {
 					for (int fila = 0; fila < mapa.length - 1; fila++) {
@@ -409,11 +463,14 @@ public class Tablero extends JPanel implements ActionListener {
 
 			for (int i = 0; i < _pacman.getVida(); i++) {
 				g2d.drawImage(_pacman.getImage(), 710 + i * 30, 150, this);
+				
+				
+							
 			}
 			
 			
-			//SECCIÓN PARA DIBUJAR EL LOGO DE LA FLORIDA.
-			g2d.drawImage(imagen, 675, 480,this);
+			//SECCIÓN PARA DIBUJAR EL LOGO D
+			g2d.drawImage(imagen, 720, 430,this);
 			
 			//SECCIÓN PARA DIBUJAR LA PAUSA.
 			if (_pacman.getEstadoPausa()){
@@ -422,6 +479,25 @@ public class Tablero extends JPanel implements ActionListener {
 			g2d.setFont(new Font("Verdana", Font.BOLD, 20));
 			g2d.drawString("PAUSA", 730, 600);
 			}
+			break;
+		}
+		case "gameover":
+		{
+			
+			g2d.setColor(Color.WHITE);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 60));
+			g2d.drawString("Game Over", 250, 250);
+			g2d.setFont(new Font("Verdana", Font.BOLD, 30));
+			g2d.drawString("Pulse [Intro] para continuar", 190, 310);
+			
+			if (puntos>236)
+			{
+				g2d.setFont(new Font("Verdana", Font.BOLD, 80));
+				g2d.drawString("FELICIDADES", 200, 420);
+			}
+			break;
+		}
+		}
 	}
 
 	// MÉTODO PARA COMPROBAR SI PACMAN SE PUEDE MOVER.
@@ -443,6 +519,11 @@ public class Tablero extends JPanel implements ActionListener {
 					_pacman.setPuntuacion(10); // Sumamos los puntos del
 												// puntito.
 					_audio.BALL.play(); // Mostramos Auido para la comida.
+					puntos ++;
+					if (puntos>236){
+						Estado ="gameover";
+						
+					}
 
 				}
 
@@ -580,6 +661,7 @@ public class Tablero extends JPanel implements ActionListener {
 
 	// MÉTODO PARA LA CARGA DEL MAPA.
 	public void cargaMapa() {
+		
 		try {
 			for (int columna = 0; columna < map.length; columna++) {
 				for (int fila = 0; fila < map.length - 1; fila++) {
@@ -592,6 +674,7 @@ public class Tablero extends JPanel implements ActionListener {
 					} else if (map[columna][fila] == 2) {
 						mapa[columna][fila] = new punto_Obj(fila * 24,
 								columna * 24);
+						
 					} else if (map[columna][fila] == 3) {
 						mapa[columna][fila] = new superPunto_Obj(fila * 24,
 								columna * 24);

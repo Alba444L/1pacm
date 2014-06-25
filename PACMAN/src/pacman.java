@@ -28,6 +28,7 @@ public class pacman {
 	private int vidas; // almacenamos el numero de vidas.
 	private boolean activo;
 	private boolean pausa; //Almacena si el juego esta en pausa.
+	private boolean enter=false;
 	
 	
 	public void move() {
@@ -294,9 +295,24 @@ public class pacman {
 				else {
 					pausa = false;
 				}
+			}
+			
+			if (key ==KeyEvent.VK_ENTER){
+				enter =true;
 				
 			}
 
+		}
+		
+		public boolean getEnter()
+		{
+			
+			return enter;
+		}
+		
+		public void setEnter(boolean activo)
+		{
+			enter=activo;
 		}
 
 		public void keyReleased(KeyEvent e) {
@@ -316,6 +332,10 @@ public class pacman {
 			if (key == KeyEvent.VK_DOWN) {
 				direccion = 0;
 			
+			}
+			if (key ==KeyEvent.VK_ENTER){
+				enter =false;
+				
 			}
 
 		}
