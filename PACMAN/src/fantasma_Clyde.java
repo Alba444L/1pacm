@@ -43,9 +43,12 @@ public class fantasma_Clyde extends fantasma{
 				// final de su camino.
 				public void cambiarDireccion()
 				{
-					
+					int numeroAleatorio;
+					do {
 					//Definimos el número Aleatorio  ya que el movimiento tiene ue ser aleatorio.
-					int numeroAleatorio = (int) (Math.random()*4+1);
+					numeroAleatorio = (int) (Math.random()*4+1);
+					}while (direccion == numeroAleatorio);
+						
 	  			switch(numeroAleatorio)
 					{
 					case 1:{

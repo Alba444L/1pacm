@@ -639,13 +639,13 @@ public class Tablero extends JPanel implements ActionListener {
 		
 		if (r2.intersects(r3))
 		{
-			//_fantasma_Pinky.cambiarDireccion(_fantasma_Pinky.getDireccion());
+			_fantasma_Pinky.cambiarDireccion(_fantasma_Pinky.getDireccion());
 			_fantasma_Blinky.cambiarDireccion(_fantasma_Blinky.getDireccion());
 			
 		}
 		if (r2.intersects(r4))
 		{
-			//_fantasma_Blinky.cambiarDireccion(_fantasma_Blinky.getDireccion());
+			_fantasma_Blinky.cambiarDireccion(_fantasma_Blinky.getDireccion());
 			_fantasma_Clyde.cambiarDireccion(_fantasma_Clyde.getDireccion());
 			
 		}
@@ -653,7 +653,7 @@ public class Tablero extends JPanel implements ActionListener {
 		if (r3.intersects(r4))
 		{
 			_fantasma_Pinky.cambiarDireccion(_fantasma_Pinky.getDireccion());
-			//_fantasma_Clyde.cambiarDireccion(_fantasma_Clyde.getDireccion());
+			_fantasma_Clyde.cambiarDireccion(_fantasma_Clyde.getDireccion());
 			
 		}
 
